@@ -43,9 +43,7 @@ const mutations = {
 };
 
 const filter = (name) => {
-  return name
-    .split(" ")
-    .map(item => item);
+  return name.split(" ");
 };
 
 const actions = {
