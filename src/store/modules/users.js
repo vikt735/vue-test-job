@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import convertStringToArray from '../../helpers/convertStringToArray';
 axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com';
 
 const state = {
@@ -42,17 +42,13 @@ const mutations = {
     }
 };
 
-const filter = (name) => {
-  return name.split(" ");
-};
-
 const actions = {
   async fetchUsers({ commit, state }, query) {
     commit('SET_LOADING', true);
     try{ 
         const responseUsername = await axios.get(`/users`, {
           params: {
-            username: filter(query),
+            username: convertStringToArray(query),
             _page: state.page,
             _limit: state.limit
           },
@@ -62,7 +58,7 @@ const actions = {
         });
         const responseID = await axios.get(`/users`, {
           params: {
-            id: filter(query),
+            id: convertStringToArray(query),
             _page: state.page,
             _limit: state.limit
           },
@@ -106,7 +102,12 @@ const actions = {
 const getters = { 
   selectedUser(state) {
     return state.users.find((user) => user.id === state.activeTab);
-  }  
+  },  
+  getUsers(state) {
+    const ids = state.users.map(({ username }) => username);
+    return state.users.filter(({ username }, index) =>
+    !ids.includes(username, index + 1));
+  }
 };
 
 export default {

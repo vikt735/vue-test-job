@@ -1,10 +1,11 @@
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'side-bar',
   computed: {
     ...mapState('users', ['users', 'isLoading', 'searchQuery', 'activeTab', 'notFoundText', 'isError']),
+    ...mapGetters('users', ['getUsers'])
   },
   methods: {
     ...mapActions('users', [ 'selectUser', 'fetchUsers']),
@@ -27,7 +28,7 @@ export default {
     <transition-group v-else name="list">
         <UITab   
           v-scroll="{ selector: '#tabId' }"
-          v-for="user in users" 
+          v-for="user in getUsers" 
           :key="user.id" 
           :user="user" 
           @preview="selectUser(user.id)"
